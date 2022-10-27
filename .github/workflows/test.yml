@@ -1,0 +1,23 @@
+name: get-latest-release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * *
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Echo Caddy Version
+        run: |
+          TMP_FILE="$(mktemp)"
+          wget -q 'https://api.github.com/repos/caddyserver/caddy/releases/latest' -O "$TMP_FILE"
+          RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print substr($4,2)}')"
+          RELEASE_VERSION="v${RELEASE_LATEST#v}"
+          "rm" "$TMP_FILE"
+          DOWNLOAD_LINK="https://github.com/caddyserver/caddy/releases/download/$RELEASE_VERSION/caddy_${RELEASE_LATEST}_linux_amd64.tar.gz"
+          echo "Downloading Caddy archive: $DOWNLOAD_LINK"
