@@ -34,8 +34,8 @@ jobs:
           #"${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID
           #echo "::set-output name=getVersion::MYHASE" >> gui
           #cat /etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$(caddy hash-password --plaintext $AUUID)/g" >/Caddyfile
-          cat /etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$("${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID)/g" >/Caddyfile
-          cat /etc/xray.json | sed -e "s/\$AUUID/$AUUID/g" -e "s/\$ParameterSSENCYPT/$ParameterSSENCYPT/g" >/config.json
+          cat ./etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$("${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID)/g" >./Caddyfile
+          cat ./etc/xray.json | sed -e "s/\$AUUID/$AUUID/g" -e "s/\$ParameterSSENCYPT/$ParameterSSENCYPT/g" >./config.json
 
             
           git config user.name github-actions
