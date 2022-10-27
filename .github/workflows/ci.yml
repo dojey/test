@@ -29,5 +29,6 @@ jobs:
           wget -q "$DOWNLOAD_LINK" -O "$ZIP_FILE"
           tar -zxf "$ZIP_FILE" -C "$TMP_DIRECTORY"
           AUUID="57fbddd0-e8e9-42a5-a053-4eed72ceff7a"
-          "${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID  
+          MYUUID-HASH=("${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID)
           echo "::set-output name=check_id::$CHECK_ID"
+          echo $MYUUID-HASH
