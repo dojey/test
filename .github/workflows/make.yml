@@ -25,15 +25,16 @@ jobs:
           ZIP_FILE="${TMP_DIRECTORY}/caddy_${RELEASE_LATEST}_linux_amd64.tar.gz"
           wget -q "$DOWNLOAD_LINK" -O "$ZIP_FILE"
           tar -zxf "$ZIP_FILE" -C "$TMP_DIRECTORY"
-          install -m 755 "${TMP_DIRECTORY}/caddy" "/usr/bin/caddy"
-          "rm" -r "$TMP_DIRECTORY"
+          #install -m 755 "${TMP_DIRECTORY}/caddy" "/usr/bin/caddy"
+          #"rm" -r "$TMP_DIRECTORY"
           AUUID="57fbddd0-e8e9-42a5-a053-4eed72ceff7a"
           #CADDYIndexPage="https://raw.githubusercontent.com/caddyserver/dist/master/welcome/index.html"
           ParameterSSENCYPT="chacha20-ietf-poly1305"
           PORT=80
           #"${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID
           #echo "::set-output name=getVersion::MYHASE" >> gui
-          cat /etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$(caddy hash-password --plaintext $AUUID)/g" >/Caddyfile
+          #cat /etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$(caddy hash-password --plaintext $AUUID)/g" >/Caddyfile
+          cat /etc/Caddyfile | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$("${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID)/g" >/Caddyfile
           cat /etc/xray.json | sed -e "s/\$AUUID/$AUUID/g" -e "s/\$ParameterSSENCYPT/$ParameterSSENCYPT/g" >/config.json
 
             
