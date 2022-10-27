@@ -1,0 +1,34 @@
+name: get-latest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * *
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      check_id: ${{ steps.getVersion.outputs.check_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Echo Caddy VersionVersion
+        id: getVersion
+        run: |
+          TMP_FILE="$(mktemp)"
+          wget -q 'https://api.github.com/repos/caddyserver/caddy/releases/latest' -O "$TMP_FILE"
+          RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print substr($4,2)}')"
+          RELEASE_VERSION="v${RELEASE_LATEST#v}"
+          "rm" "$TMP_FILE"
+          DOWNLOAD_LINK="https://github.com/caddyserver/caddy/releases/download/$RELEASE_VERSION/caddy_${RELEASE_LATEST}_linux_amd64.tar.gz"
+          echo "Downloading Caddy archive: $DOWNLOAD_LINK"
+          TMP_DIRECTORY="$(mktemp -d)"
+          ZIP_FILE="${TMP_DIRECTORY}/caddy_${RELEASE_LATEST}_linux_amd64.tar.gz"
+          wget -q "$DOWNLOAD_LINK" -O "$ZIP_FILE"
+          tar -zxf "$ZIP_FILE" -C "$TMP_DIRECTORY"
+          AUUID="57fbddd0-e8e9-42a5-a053-4eed72ceff7a"
+          "${TMP_DIRECTORY}/caddy" hash-password --plaintext $AUUID 
+          echo "::set-output name=check_id::$CHECK_ID"
+          
