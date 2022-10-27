@@ -1,0 +1,28 @@
+name: get-caddy-latest-release
+
+env:
+  REPO_NAME: caddyserver/caddy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * *
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Latest Caddy Version
+        id: getVersion
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: caddyserver/caddy
+          excludes: "prerelease, draft"
+
+      - name: Echo Caddy Version
+        run: |
+          echo ${{ steps.getVersion.outputs.release }}
