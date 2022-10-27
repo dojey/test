@@ -26,4 +26,3 @@ jobs:
       - name: Echo Caddy Version
         run: |
           echo ${{ steps.getVersion.outputs.release }}
-          echo ${{ steps.getVersion.outputs.id }}
